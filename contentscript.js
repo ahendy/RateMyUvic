@@ -8,10 +8,10 @@ function profFinder() {
            
             $cells.each(function (cellIndex) {          //search column to find the professor name one
                 if (cellIndex == 19) {                          //once found send message to background script
-                	console.log($(this).text());                   //background script pushes professor names to local storage
+                	//console.log($(this).text());                   //background script pushes professor names to local storage
                		var name = $(this).text();                     //popup reads local storage to
                     if(name.includes("TBA") || subArr.indexOf(name)>-1 ){
-                            console.log("TBA");
+                            console.log("tba or already found");
                     }else{
 
                         subArr.push(name);

@@ -1526,8 +1526,8 @@ var myArray = [
 "lastname": "Boer",
 "url": "http://www.ratemyprofessors.com/ShowRatings.jsp?tid=107919"},
 {
-"firstname": "Mich",
-"lastname": "re",
+"firstname": "Michele",
+"lastname": "De La Chevrotiere",
 "url": "http://www.ratemyprofessors.com/ShowRatings.jsp?tid=1842588"},
 {
 "firstname": "Emile",
@@ -7457,14 +7457,40 @@ function main(arr) {
     for(pos = 0; pos < numProf; pos++) {// < numprof
 
         var result = $.grep(arr, function(e){ return subArr.professors[pos].includes(e.firstname)== true && subArr.professors[pos].includes(e.lastname); });
-       
-        for( each = 0; each<result.length;each++){
-        	ajax(myCallBack, result[each], out);			//checks to see if multiple professors for a class
-
-
-        }
-
+       	console.log(result.length);
         
+
+       if(result.length>0){
+       		for( each = 0; each<result.length;each++){//checks to see if multiple professors for a class
+        		console.log(result.length);
+				ajax(myCallBack, result[each], out);
+        	}
+   		
+
+   		}	
+   		
+
+   		else{
+   			console.log("fial");
+		    out+='<table style="width:100%">'
+		    out+= "<p><tr>\
+		                    <th>Name</th>\
+		                    <th>Number of Ratings</th>\
+		                    <th>Overall Rating</th>\
+		                    <th>Average Grade</th>\
+		                    <th>Helpfulness</th>\
+		                    <th>Clarity</th>\
+		                    <th>Easiness</th><tr>";
+		    out +="<tr>\
+		            <td>"+"unknown"+ "</td>\
+		            <td colspan="+'"6"'+">Selected Professor's information was not found. </td>\
+		             </p>";
+
+		            $('body').append(out);
+		            console.log(out);
+		   }
+
+        	
 
     }
 }
