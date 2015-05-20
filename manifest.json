@@ -1,0 +1,45 @@
+{
+ "manifest_version": 2,
+
+ "name": "RateMyVic",
+ "description": "does nothing..yet.",
+ "version": "1.0",
+
+"background":{
+	"scripts": ["jquery-2.1.4.min.js","background.js"],
+	"persistent": false
+},
+"permissions":[
+	"tabs", "storage",
+	"https://www.uvic.ca/mypage/render*",
+	"http://www.ratemyprofessors.com/*",
+	"http://ratemyprofessors.com/*",
+	"http://events.uvic.ca/*"
+	],
+"web_accessible_resources":["warm-chili.png",
+							"scorching-chili.png",
+							"cold-chili.png"],
+
+ "browser_action": {
+
+ 	"default_icon": "scorching-chili.png",
+ 	"default_popup": "gouv.html",
+ 	"default_title": "Finds UVic professor stats from RateMyProf"
+
+ },
+
+"content_scripts": [
+	{
+	
+	"matches":["https://www.uvic.ca/*"
+	//"http://*/*"
+	],"all_frames": true,
+	"js":["jquery-2.1.4.min.js","contentscript.js"]
+
+	}
+
+]
+
+
+}
+
