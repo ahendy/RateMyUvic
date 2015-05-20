@@ -7453,14 +7453,15 @@ function main(arr) {
     var subArr = localStorage.professors; //contains professor names from content script
     subArr = JSON.parse(subArr);	//turns string into json
     var numProf = subArr.professors.length;
-
+    var unknown= false;
+    
     for(pos = 0; pos < numProf; pos++) {// < numprof
 
         var result = $.grep(arr, function(e){ return subArr.professors[pos].includes(e.firstname)== true && subArr.professors[pos].includes(e.lastname); });
-       	console.log(result.length);
+       	console.log(result);
         
-
-       if(result.length>0){
+       
+       if(result.length>0 ){
        		for( each = 0; each<result.length;each++){//checks to see if multiple professors for a class
         		console.log(result.length);
 				ajax(myCallBack, result[each], out);
@@ -7470,7 +7471,8 @@ function main(arr) {
    		}	
    		
 
-   		else{
+   		else if(unknown == false){
+   			unknown = true;
    			console.log("fial");
 		    out+='<table style="width:100%">'
 		    out+= "<p><tr>\
@@ -7482,12 +7484,12 @@ function main(arr) {
 		                    <th>Clarity</th>\
 		                    <th>Easiness</th><tr>";
 		    out +="<tr>\
-		            <td>"+"unknown"+ "</td>\
-		            <td colspan="+'"6"'+">Selected Professor's information was not found. </td>\
+		            <td>"+"Unknown"+ "</td>\
+		            <td colspan="+'"6"'+">One or more selected Professor's information was not found. </td>\
 		             </p>";
 
 		            $('body').append(out);
-		            console.log(out);
+		            
 		   }
 
         	
