@@ -1970,10 +1970,6 @@ var myArray = [
 "lastname": "Fennema",
 "url": "http://www.ratemyprofessors.com/ShowRatings.jsp?tid=349128"},
 {
-"firstname": "Norman",
-"lastname": "Fennema",
-"url": "http://www.ratemyprofessors.com/ShowRatings.jsp?tid=1942754"},
-{
 "firstname": "Stephen",
 "lastname": "Ferance",
 "url": "http://www.ratemyprofessors.com/ShowRatings.jsp?tid=1877559"},
@@ -7452,12 +7448,13 @@ function main(arr) {
 
     var subArr = localStorage.professors; //contains professor names from content script
     subArr = JSON.parse(subArr);	//turns string into json
+    console.log(subArr);
     var numProf = subArr.professors.length;
     var unknown= false;
     
     for(pos = 0; pos < numProf; pos++) {// < numprof
 
-        var result = $.grep(arr, function(e){ return subArr.professors[pos].includes(e.firstname)== true && subArr.professors[pos].includes(e.lastname); });
+        var result = $.grep(arr, function(e){ return subArr.professors[pos].includes(e.firstname) && subArr.professors[pos].includes(e.lastname); });
        	console.log(result);
         
        
@@ -7472,6 +7469,7 @@ function main(arr) {
    		
 
    		else if(unknown == false){
+   			var unknownName = subArr.professors[pos];
    			unknown = true;
    			console.log("fial");
 		    out+='<table style="width:100%">'
@@ -7483,8 +7481,8 @@ function main(arr) {
 		                    <th>Helpfulness</th>\
 		                    <th>Clarity</th>\
 		                    <th>Easiness</th><tr>";
-		    out +="<tr>\
-		            <td>"+"Unknown"+ "</td>\
+		    out +='<tr>\
+		            <td>' + unknownName + "</td>\
 		            <td colspan="+'"6"'+">One or more selected Professor's information was not found. </td>\
 		             </p>";
 
