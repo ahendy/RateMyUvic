@@ -7386,7 +7386,7 @@ var myArray = [
 "lastname": "Zadnik",
 "url": "http://www.ratemyprofessors.com/ShowRatings.jsp?tid=1306890"},
 {
-"firstname": "Mike",
+"firstname": "Michael",
 "lastname": "Zastre",
 "url": "http://www.ratemyprofessors.com/ShowRatings.jsp?tid=27464"},
 {

@@ -21,13 +21,9 @@ button:hover {
   text-decoration: none;
 }
 
-
-iframe#u3011n6{
-  overflow: visible;
-
-}
 div#pop-up{
 
+  
   display: none;
   position: absolute;
   width: 150px;

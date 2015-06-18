@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
 
-        "name": "Red Hot Chili Professors",
+        "name": "RateMyUVic",
         "description": "Finds UVic professor stats from RateMyProfessor.com.",
-        "version": "1.0",
+        "version": "1.1",
 
         "background": {
         "scripts": ["jquery-2.1.4.min.js", "background.js"],

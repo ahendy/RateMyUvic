@@ -1,5 +1,3 @@
-
-
 var myArray = [
 {
 "firstname": "Jackson",
@@ -7440,239 +7438,120 @@ var myArray = [
 ];
 
 
-function profFinder() {
-	   var button = $("<button id ='btn'>Hover for info: </button>");
+main(myArray);
+
+function main(arr) {
+    var out = "";
+
+
+    var subArr = localStorage.professors; //contains professor names from content script
+    subArr = JSON.parse(subArr);	//turns string into json
+    console.log(subArr);
+    var numProf = subArr.professors.length;
+    var unknown= false;
+    
+    for(pos = 0; pos < numProf; pos++) {// < numprof
+
+        var result = $.grep(arr, function(e){ return subArr.professors[pos].includes(e.firstname) && subArr.professors[pos].includes(e.lastname); });
+       	console.log(result);
         
-        subArr = [];
-        $(".datadisplaytable.tablesorter tr").each(function (index) {
-            $cells = $(this).find("td");
-            
-                                                         //background script pushes professor names to local storage
+       
+       if(result.length>0 ){
+       		for( each = 0; each<result.length;each++){//checks to see if multiple professors for a class
+        		console.log(result.length);
+				ajax(myCallBack, result[each], out);
+        	}
+   		
 
-            $cells.each(function (cellIndex) {          //search column to find the professor name one
-                
-                if (cellIndex == 19) {                          //once found send message to background script
-                                                                //background script pushes professor names to local storage
-                	var name = $(this).text();                     //popup reads local storage to
-                    var result = $.grep(myArray, function(e){ return name.includes(e.firstname) && name.includes(e.lastname); }); //contains object of professor
-                        
+   		}	
+   		
 
-                    
-                    if(name.includes("TBA") || subArr.indexOf(name)>-1 ||result.length==0){
-                           // console.log("tba or already found");
-                    }else{
-                       							var hasAppended = false;
-                       							$(this).wrap(button);
-						                       	var moveLeft = 20;
-						                       	var moveDown = 10;
-						        
+   		else if(unknown == false){
+   			var unknownName = subArr.professors[pos];
+   			unknown = true;
+   			console.log("fial");
+		    out+='<table style="width:100%">'
+		    out+= "<p><tr>\
+		                    <th>Name</th>\
+		                    <th>Number of Ratings</th>\
+		                    <th>Overall Rating</th>\
+		                    <th>Average Grade</th>\
+		                    <th>Helpfulness</th>\
+		                    <th>Clarity</th>\
+		                    <th>Easiness</th><tr>";
+		    out +='<tr>\
+		            <td>' + unknownName + "</td>\
+		            <td colspan="+'"6"'+">One or more selected Professor's information was not found. </td>\
+		             </p>";
 
-						         $(this).hover(
-						                        		function(e){ //onhover
-						                               		
-						                        			
-							                       	        console.log(result[0].url);              	
-							                            	if(hasAppended == false){
+		            $('body').append(out);
+		            
+		   }
 
-							                            		for(var each =0;each<result.length;each++){
-							                                    	
-							                                    	//ajax(myCallBack, result[each],each); //now have prof info use fact that to onclick you must onhover
-							                                  		chrome.runtime.sendMessage({teach: result[each],each: each},function(response){
-							                                  			
-							                    						myCallBack(response);
-							                                  			//myCallBack(response.infos,response.teachObj,repsonse.each);
+        	
 
-							                                  		});
-							                                  		hasAppended = true;
-							                                  		
-							                             			     	
-							                          	
-
-							                           			} //end for
-							                           			
-							                                  		
-							                           				
-							                           		} else {
-							                           			
-							                           			var butSelector = $("button td.dddefault:contains('"+ name +"')").parent();
-							                           			var popupSelector = butSelector.parent().next();
-							                           			
-							                           			
-							                           			$(popupSelector).show().css('top',e.pageY +moveDown)
-							                           				.css('left',e.pageX+ moveLeft);
-							                           						
-							                           			$('div#pop-up2:eq(0)').show().css('top',e.pageY +moveDown)
-							                           				.css('left',e.pageX+ moveLeft);
-							                           			
-							                           			}//end else
-
-							                           
-							                     //end onhover       	
-						                        },  	function(){ //offhover
-						                        			$('div#pop-up').hide();
-						                        			$('div#pop-up2').hide();
-						                       			 }); //end off hover
-						                       
-						                     $(this).mousemove(function(e){
-						                     	$("div#pop-up").css('top', e.pageY + moveDown).css('left', e.pageX + moveLeft+200);
-						                     	$("div#pop-up2").css('top', e.pageY + moveDown).css('left', e.pageX + moveLeft-150);
-
-						                     });
-
-						                     $(this).click(function(){
-						                     		for (var i = 0 ; i <result.length; i++) {
-						                    	 		window.open(result[i].url)
-						                	     	};
-						                
-						                     });
-						                        
-
-						subArr.push(name);
-                        console.log("button appended to " + name);   
-                        console.log(subArr);
-                    }
-                        
-                
-              
-
-                };
-
-
-           
-
-
-            });
-
-        });
-        
-
-
-
-
-    chrome.extension.sendMessage({professors: subArr}); //pushes list of professors to Localstorage for use in popup HTML
-
-
-
- 
-
-
+    }
 }
 
 
 
 
-/*function ajax(callback, array,each){ // ajax to obtain data from url
-    try{
-        $.get(array.url, function(data){
-                var $response = $(data);
-                callback($response,array,each);
 
-        });
+function ajax(callback, array, out){ // ajax to obtain data from url
+    try{
+    	$.get(array.url, function(data){
+                var $response = $(data);
+                callback($response,array,out);
+
+    	});
     }catch(err){
-        console.log(err);
+    	console.log(err);
 
     }
     
 }
-*/
 
 
 
 
-//function myCallBack($response, array,each){ //function that relies on returned ratings
-  function myCallBack(response){
-    var each = response.each;
-    var array = response.teachObj;
-    var $response = response.infos;
+
+function myCallBack($response, array,out){ //function that relies on returned ratings
     
-   
     var total = "/5.0";
-    overallRating = $($response).find("div.grade").eq(0).text() + total;
-    avgGrade = $($response).find('div.grade').eq(1).text();
+   	overallRating = $response.find("div.grade").eq(0).text() + total;
+    avgGrade = $response.find('div.grade').eq(1).text();
 
-    helpfulness = $($response).find('div.rating').eq(0).text()+ total;
-    clarity = $($response).find('div.rating').eq(1).text()+ total;
-    easiness = $($response).find('div.rating').eq(2).text()+ total;
+    helpfulness = $response.find('div.rating').eq(0).text()+ total;
+    clarity = $response.find('div.rating').eq(1).text()+ total;
+    easiness = $response.find('div.rating').eq(2).text()+ total;
     
-    numRatings = $($response).find("div.table-toggle.rating-count.active").eq(0).text();
+    numRatings = $response.find("div.table-toggle.rating-count.active").eq(0).text();
     //numRatings =  numRatings.slice(0,11) + " Ratings"
     //hot = chrome.extension.getURL("scorching-chili.png");
-    console.log(overallRating);
-
-    var nameSelector = $("") 
-    var butSelector = $("button td.dddefault:contains('"+ array.lastname +"')").parent();     // [dddefault^='"+  array.firstname +"']
-    //console.log(butSelector.get());
-   	
-    //console.log($("button").next().get());
-
-   
+        
 
 
-
-    if(each==0){
-    	console.log("length 2");
-		var div = "<div id ='pop-up'>\
-		    				<h1><a href='"+array.url+"'</a>" + array.firstname + " " + array.lastname + "</h1>\
-		    				<h2>"+ numRatings+"\
-		    			</div>";
- 			
- 					if(overallRating.indexOf("Select")>-1){
-    					$("button,#pop-up:visible").after(div);
-    					$("#pop-up").append("<div id ='error-message'>This Professor has not yet been rated.")
-
-
-		   			 }else{
-		   			 		
-		 					$(butSelector.parent()).after(div); //initializes popup div
-		 					
-		 					var popupSelector = butSelector.parent().next();
-							$(popupSelector).append("<div id ='overallRating'>Overall Rating: " + overallRating);   
-						    $(popupSelector).append("<div id ='avgGrade'>Average Grade: " + avgGrade);   
-						    $(popupSelector).append("<div id ='helpfulness'>Helpfulness: " + helpfulness);   
-						    $(popupSelector).append("<div id ='easiness'>Clarity: " + clarity);  
-						    $(popupSelector).append("<div id ='easiness'>Easiness: " + easiness);  
-						    $(popupSelector).show();
-
-
-		   			 }
-
-		    //$("button").after("<div id = 'buffer' </div> ")
-		    
-    }
-    else{
-
-
-		    var div = "<div id ='pop-up2'>\
-		    				<h1><a href='"+array.url+"'</a>" + array.firstname + " " + array.lastname + "</h1>\
-		    				<h2>"+ numRatings+"\
-		    			</div>";
-
-
-
-		    $("#pop-up").after(div);
-			$("#pop-up2").append("<div id ='overallRating'>Overall Rating: " + overallRating);   
-		    $("#pop-up2").append("<div id ='avgGrade'>Average Grade: " + avgGrade);   
-		    $("#pop-up2").append("<div id ='helpfulness'>Helpfulness: " + helpfulness);
-		    $("#pop-up2").append("<div id ='easiness'>Clarity: " + clarity);    
-		    $("#pop-up2").append("<div id ='easiness'>Easiness: " + easiness);  
-	  		$('div#pop-up2:eq(0)').show();
-	  }
-
-
-
-
-	  testSelector = $("button td.dddefault:contains('"+ array.lastname +"')");							
-
-	  console.log(testSelector.parent().next().get());
-
+    out+='<table style="width:100%">'
+    out+= "<p><tr>\
+                    <th>Name</th>\
+                    <th>Number of Ratings</th>\
+                    <th>Overall Rating</th>\
+                    <th>Average Grade</th>\
+                    <th>Helpfulness</th>\
+                    <th>Clarity</th>\
+                    <th>Easiness</th><tr>";
+    out +="<tr>\
+            <td><a href='"+array.url+"'</a>" +array.firstname+" " +array.lastname+"</td>\
+            <td>"+ numRatings+"</td>\
+            <td>"+ overallRating+ "</td>\
+            <td>"+ avgGrade+ "</td>\
+            <td>"+ helpfulness + "</td>\
+            <td>"+ clarity+ "</td>\
+            <td>"+ easiness + "</td></p>";
+        
+    
+    
+    $('body').append(out);
+        
+    
 }
-
-
-
-
-
-
-
-profFinder();
-
-
