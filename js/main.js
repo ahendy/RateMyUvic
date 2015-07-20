@@ -7466,7 +7466,7 @@ function main(arr) {
    		}	
    		
 
-   		else if(unknown == false){
+   		else if(unknown == false){ //allows for only one unknown to be posted
    			var unknownName = subArr.professors[pos];
    			unknown = true;
    			console.log("fial");
