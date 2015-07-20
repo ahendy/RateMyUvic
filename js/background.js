@@ -1,3 +1,6 @@
+
+
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 	if ("professors" in request){
 		console.log(JSON.stringify(request));
@@ -7,12 +10,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 
 	}else{ //else message sent for content script
 
-
 			try{
 			     $.get(request.teach.url, function(data){
 			                var $response = (data);
-			                var test = {infos: $response, teachObj: request.teach, each: request.each};
-			                sendResponse(test);
+			                var respObj {infos: $response, teachObj: request.teach, each: request.each};
+			                sendResponse(respObj);
 
 			        });
 			    }catch(err){

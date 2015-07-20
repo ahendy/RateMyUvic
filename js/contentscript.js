@@ -7470,35 +7470,33 @@ function profFinder() {
 
 
                     $(this).hover(
+						
+						 function (e) { //onhover
 
-                    function (e) { //onhover
+                        	console.log(result[0].url);
+	                        if (hasAppended == false) {
 
-                        //$("iframe#u3011n6").css("overflow", "visible" );
+		                            for (var each = 0; each < result.length; each++) { //use for each in case of two professors for one course.					                                    	
 
-                        console.log(result[0].url);
-                        if (hasAppended == false) {
-
-                            for (var each = 0; each < result.length; each++) { //use for each in case of two professors for one course.					                                    	
-
-                                chrome.runtime.sendMessage({
-                                    teach: result[each],
-                                    each: each
-                                }, function (response) {
-                                    //sendmessage and on return use callback to filter data from (response)
-                                    myCallBack(response);
+		                                chrome.runtime.sendMessage({
+		                                    teach: result[each],
+		                                    each: each
+		                                }, function (response) {
+		                                    //sendmessage and on return use callback to filter data from (response)
+		                                    myCallBack(response);
 
 
-                                });
-                                hasAppended = true;
+		                                });
+		                                hasAppended = true;
 
-                                //when hasAPpend = true ajax will never be called again, saving time for each onhover
+		                                //when hasAPpend = true ajax will never be called again, saving time for each onhover
 
 
-                            } //end for
+		                            } //end for
 
 
 
-                        } else { //else we have already used ajax 
+	                        } else { //else we have already used ajax 
 
                             var btnSelector = $("button td.dddefault:contains('" + name + "')").parent();
                             var popupSelector = btnSelector.parent().next();
@@ -7590,7 +7588,7 @@ function myCallBack(response) { //function that relies on returned ratings
 
 
 
-    var btnSelector = $("button td.dddefault:contains('" + array.lastname + "')").parent(); // [dddefault^='"+  array.firstname +"']
+    var btnSelector = $("button td.dddefault:contains('" +" "+ array.lastname + "')").parent(); // [dddefault^='"+  array.firstname +"']
 
 
     if (each == 0) {
