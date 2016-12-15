@@ -1,8 +1,8 @@
 var myArray = [
 	{
-		firstname: <name>,
-		lastname: <lastname>,
-		url: <url>,
+		"firstname": <name>,
+		"lastname": <lastname>,
+		"url": <url>,
 	},
 ]
 
